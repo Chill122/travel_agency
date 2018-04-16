@@ -1,0 +1,59 @@
+<%= form_for(@accommodation) do |f| %>
+  <% if @accommodation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@accommodation.errors.count, "error") %> prohibited this accommodation from being saved:</h2>
+
+      <ul>
+      <% @accommodation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :title, 'Name' %><br>
+    <%= f.text_field(:title, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :accom_type, 'Type' %><br>
+    <%= f.select :accom_type, options_for_select([
+        ["Hotel", "Hotel"], 
+        ["Apartment", "Apartment"], 
+        ["Hostel", "Hostel"],
+        ["Motel", "Motel"],
+        ["Cottage", "Cottage"],
+        ["Mansion", "Mansion"],
+        ["Resort", "Resort"],
+        ["Igloo", "Igloo"],
+        ["Villa", "Villa"],
+        ["Camp", "Camp"],
+        ["Pension", "Pension"]
+        ]), {}, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :rating %><br>
+    <%= f.select :rating, options_for_select([
+        ["5 stars", "5"], 
+        ["4 stars", "4"], 
+        ["3 stars", "3"],
+        ["2 stars", "2"],
+        ["1 star", "1"]
+        ]), {}, class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description %><br>
+    <%= f.text_area(:description, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :address %><br>
+    <%= f.text_field(:address, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :place_id, 'City / State' %>
+    <%= f.select :place_id, options_for_select(@places.collect { | place | [place.name, place.id] }, @place.id), {}, class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Confirm", :class => 'btn btn-primary', :style => 'width: 50%' %>
+  </div>
+<% end %>

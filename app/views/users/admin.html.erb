@@ -1,0 +1,120 @@
+<div class="margin-container">
+  <% if notice %>
+      <p id="notice" class="alert alert-success"><%= notice %></p>
+  <% end %>
+  
+  <div class="container">
+    <div class="well">
+      <%= link_to 'New Offer', new_offer_path, :class => 'btn btn-primary' %>
+      
+      <%= link_to 'View Accommodations', accommodations_path, :class => 'btn btn-default' %>
+      
+      <%= link_to 'View Places', places_path, :class => 'btn btn-default' %>
+      
+      <%= link_to 'View Countries', countries_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="well">
+      <h1>Ultra Admins</h1>
+      <% if @admins.exists? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @ultra_admins.each do |user| %>
+            <tr>
+              <td><%= user.first_name %></td>
+              <td><%= user.last_name %></td>
+              <td><%= user.email %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+      <div>There are no ultra admins.</div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="well">
+      <h1>Admins</h1>
+      <% if @admins.exists? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <% if current_user.admin > 1 %>
+            <th colspan="1"></th>
+            <% end %>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @admins.each do |user| %>
+            <tr>
+              <td><%= user.first_name %></td>
+              <td><%= user.last_name %></td>
+              <td><%= user.email %></td>
+              <% if current_user.admin > 1 %>
+              <td style="text-align: right;">
+                  <%= link_to "Remove Admin", remove_admin_path(user), method: :delete, data: { confirm: "You sure?" }, :class => 'btn btn-default' %>
+              </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+      <div>There are no admins.</div>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="well">
+      <h1>Users</h1>
+      <% if @users.exists? %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <% if current_user.admin > 1 %>
+            <th colspan="1"></th>
+            <% end %>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.first_name %></td>
+              <td><%= user.last_name %></td>
+              <td><%= user.email %></td>
+              <% if current_user.admin > 1 %>
+              <td style="text-align: right;">
+                  <%= link_to "Make Admin", make_admin_path(user), method: :post, data: { confirm: "You sure?" }, :class => 'btn btn-default' %>
+              </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+      <div>There are no users.</div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="margin-container">
+  <div class="container">
+    <% if notice %>
+        <p id="notice" class="alert alert-success"><%= notice %></p>
+    <% end %>
+  </div>
+  <% if user_signed_in? %>
+    <% if @reservations.exists? %>
+    <div class="container">
+      <div class="well">
+        <h1>My reservations</h1>
+    
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Offer</th>
+              <th>Persons</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Price</th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <% @reservations.each do |reservation| %>
+            <tr>
+              <td><%= reservation.offer.title %></td>
+              <td><%= reservation.persons %></td>
+              <td><%= reservation.offer.start_date.strftime("%A - %d. %m. %Y") %></td>
+              <td><%= reservation.offer.end_date.strftime("%A - %d. %m. %Y") %></td>
+              <td><%= number_to_currency reservation.offer.price * reservation.persons, unit: "€", separator: ",", delimiter: "", format: "%n %u" %></td>
+              <td style="text-align: right">
+                <%= link_to 'More', reservation.offer, :class => 'btn btn-primary' %>
+                <%= link_to 'Cancel reservation', reservation, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-default' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% end %>
+  <% end %>
+    
+    <div class="w3-row-padding container">
+      <% @offers.each do |offer| %>
+      <div class="w3-third w3-container w3-margin-bottom">
+        <%= image_tag offer.image, :style => "width: 364px; height: 228px " %>
+        <div class="w3-container w3-blue">
+          <p id="show-offer-title"><%= offer.title %></p>
+          <p id="show-offer-description"><%= number_to_currency offer.price, unit: "€", separator: ",", delimiter: "", format: "%n %u" %></p>
+          <p style="float: left"><%= offer.start_date.strftime("%A - %d. %m. %Y") %></p>
+          <%= link_to 'More', offer, :class => "btn btn-primary", :style => "float: right; margin-bottom: 10px" %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Workspace</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag "https://www.w3schools.com/w3css/4/w3.css" %>
+  <%= stylesheet_link_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" %>
+  <%= csrf_meta_tags %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  
+<nav id="nav" class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <%= link_to 'Agencija Luna', root_path, :class => "navbar-brand" %>
+    </div>
+    <% if user_signed_in? %>
+    <div class="dropdown dropdown-button">
+      <%= current_user.email %>&nbsp;
+      <button class="btn btn-primary dropdown-toggle dropdown-butto" type="button" data-toggle="dropdown">User Settings
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu" id="dropdown">
+        <li><%= link_to 'Edit profile', edit_user_registration_path %></li>
+        <% if current_user.admin > 0 %>
+        <li><%= link_to 'Admin', users_admin_path %></li>
+        <% end %>
+        <li><%= link_to('Logout', destroy_user_session_path, method: :delete) %></li>
+      </ul>
+    </div>
+    <% else %>
+    <div class="dropdown-button">
+      <%= link_to('Login', new_user_session_path, { :style=>'color:#FFFFFF;', :class => 'btn btn-success' })  %>  
+    </div>
+    <% end %>
+  </div>    
+</nav>
+
+<%= yield %>
+
+</body>
+</html>

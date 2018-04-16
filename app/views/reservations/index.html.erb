@@ -1,0 +1,41 @@
+<div class="margin-container">
+  <div class="container">
+    <% if notice %>
+        <p id="notice" class="alert alert-success"><%= notice %></p>
+    <% end %>
+  </div>
+    <div class="container">
+      <div class="well">
+        <h1>"<%= @title %>" reservations</h1>
+        <% if @reservations.exists? %>
+        <table class="table" style="margin-bottom: 0;">
+          <thead>
+            <tr>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Email</th>
+              <th>Persons</th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <% @reservations.each do |reservation| %>
+            <tr>
+              <td><%= reservation.user.first_name %></td>
+              <td><%= reservation.user.last_name %></td>
+              <td><%= reservation.user.email %></td>
+              <td><%= reservation.persons %></td>
+              <td style="text-align: right">
+                <%= link_to 'Cancel reservation', reservation, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-default' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% else %>
+        <p style="margin: 0; text-indent: 10px;"><b>There are currently no reservations for this offer.</b></p>
+        <% end %>
+      </div>
+    </div>
+</div>

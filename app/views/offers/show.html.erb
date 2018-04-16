@@ -1,0 +1,120 @@
+<div class="margin-container">
+  <div class="container">
+    <div class="container-large">
+      <% if notice %>
+        <p id="notice" class="alert alert-success"><%= notice %></p>
+      <% end %>
+    <div class="well">
+      
+      <h2><%= @offer.title %></h2>
+      <div style="float: left">
+          <p>
+            <strong>Open spots:</strong>
+            <%= @offer.spots - @reservations.sum(:persons) %> / <%= @offer.spots %>
+          </p>
+          
+          <p>
+            <strong>From:</strong>
+            <%= @offer.start_date.strftime("%A - %d. %m. %Y") %>
+          </p>
+          
+          <p>
+            <strong>To:</strong>
+            <%= @offer.end_date.strftime("%A - %d. %m. %Y") %>
+          </p>
+          
+          <p>
+            <strong>Price:</strong>
+            <%= number_to_currency @offer.price, unit: "€", separator: ",", delimiter: "", format: "%n %u" %>
+          </p>
+      </div>
+      
+      <div style="float: right">
+        <%= image_tag @offer.image, :style => "width: 400px; height: 250px " %><br><br>
+      </div>
+      
+      <div style="clear: both">
+        <h3>About</h3>
+        <%= @offer.description %>
+      </div><br>
+      
+      <% if @comments.exists? %>
+        <h3>Comments</h3>
+        <div>
+          <% @comments.each do |comment| %>
+            <div style="padding: 10px;">
+            <p id="commenter">
+              <%= comment.user.first_name %> 
+              <%= comment.user.last_name %>
+              <% if comment.user.admin > 0 %>
+                  <span style="color: red; font-size: 12px;"><i>Admin</i></span>
+              <% end %>
+            </p>
+            <p id="comment">
+              <%= comment.content %>
+              <% if user_signed_in? %>
+                <% if comment.user_id == current_user.id %>
+                  <span style="float: right;">
+                    <%= link_to 'Edit', edit_comment_path(comment) %> |
+                    <%= link_to 'Delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %>
+                  </span>
+                <% elsif current_user.admin > 0 %>
+                  <span style="float: right;">
+                    <%= link_to 'Delete', comment, method: :delete, data: { confirm: 'Are you sure?' } %>
+                  </span>
+                <% end %>
+              <% end %>  
+            </p>
+            </div>
+          <% end %>
+        </div>
+        <br>
+      <% end %>
+      <% if user_signed_in? %>
+          <button data-toggle="collapse" data-target="#comment-input" class="btn btn-primary" style="width: 130px">Add a comment</button><br><br>
+          <div id="comment-input" class="collapse">
+          <%= form_for(@comment) do |f| %>
+            <% if @comment.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+                <ul>
+                <% @comment.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+                </ul>
+            </div>
+            <% end %>
+            <div class="form-group">
+              <%= f.label :content %><br>
+              <%= f.text_area(:content, {:class => 'form-control' }) %>
+            </div>
+            <div class="form-group">
+              <%= f.hidden_field :offer_id, :value => @offer.id %>
+            </div>
+            <div class="actions">
+              <%= f.submit "Add", :class => "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+          <% if @offer.spots - @reservations.sum(:persons) == 0 %>
+            <span class="btn btn-primary" id="no-reservation">Reservations are not available</span>
+          <% else %>
+            <%= link_to "Make reservation", new_reservation_path(offer_id: @offer.id), :class => 'btn btn-primary', :style => "width: 130px" %>
+          <% end %>
+        <br><br>
+        <% if current_user.admin > 0 %>
+          <div class="btn-group btn-group-justified">
+            <% if @reservations.exists? %>
+            <%= link_to 'See reservations', reservations_path(offer_id: @offer.id, offer_title: @offer.title), :class => 'btn btn-default' %>
+            <% end %>
+            <%= link_to 'Edit', edit_offer_path(@offer), :class => 'btn btn-default' %>
+            <%= link_to 'Delete', @offer, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-default' %>
+          </div>
+          <br>
+        <% end %>
+      <% end %>
+      <%= link_to 'Back', offers_path, :class => 'btn btn-default' %>
+      </div>
+    </div>
+  </div>
+</div>

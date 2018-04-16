@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+<div class="margin-container">
+  <div class="container">
+    <div class="container-small-left">
+      <div class="well">
+        <h1>Places</h1>
+        
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Country</th>
+              <th colspan="1"></th>
+            </tr>
+          </thead>
+        
+          <tbody>
+            <% @places.each do |place| %>
+              <tr>
+                <td><%= place.name %></td>
+                <td><%= place.country.name %></td>
+                <td><%= link_to 'Delete', place, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-danger" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+        <br>
+        
+        <%= link_to 'Add a place', new_place_path, :class => "btn btn-primary" %> <br><br>
+        <%= link_to 'Back', users_admin_path, :class => "btn btn-default" %>
+    
+      </div>
+    </div>
+  </div>
+</div>

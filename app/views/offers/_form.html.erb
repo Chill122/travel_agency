@@ -1,0 +1,60 @@
+<%= form_for(@offer) do |f| %>
+  <% if @offer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@offer.errors.count, "error") %> prohibited this offer from being saved:</h2>
+
+      <ul>
+      <% @offer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.label :title %><br>
+    <%= f.text_field(:title, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :price %><br>
+    <%= f.text_field(:price, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :spots %><br>
+    <%= f.number_field(:spots, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :start_date %><br>
+    <%= f.date_select(:start_date, {:class => 'form-control' }) %>
+    <!-- <%= f.text_field :start_date, data:{ provide:'datepicker' } %> -->
+    <!-- <%= f.text_field(:start_date, {:class => 'datepicker' }) %> -->
+  </div>
+  <div class="form-group">
+    <%= f.label :end_date %><br>
+    <%= f.date_select(:end_date, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :description %><br>
+    <%= f.text_area(:description, {:class => 'form-control' }) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :image %><br>
+    <%= f.file_field(:image, :style => "width: 100%;", :class => "btn btn-default") %>
+  </div>
+  <div class="form-group">
+    <%= f.label :accommodation_id, 'Accommodation' %>
+    <%= f.select :accommodation_id, options_for_select(@accommodations.collect { | accommodation | [accommodation.title, accommodation.id] }, @accommodation.id), {}, class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Confirm", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      todayHighlight: true, 
+      orientation: 'auto top', 
+      format: 'yyyy-mm-dd'
+    });
+  });
+</script>
