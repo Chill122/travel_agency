@@ -1,24 +1,47 @@
+Travel Agency - Moon
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+We have created a website with Ruby on Cloud 9 IDE.
+__________________________________
+CREATING USERS AND LOGIN WITH DEVISE
 
+First add gem 'devise' to your gemfile
 
-Welcome to your Rails project on Cloud9 IDE!
+Then run
 
-To get started, just do the following:
+```
+bundle install
+```
+and then
 
-1. Run the project with the "Run Project" button in the menu bar on top of the IDE.
-2. Preview your new app by clicking on the URL that appears in the Run panel below (https://HOSTNAME/).
+```
+rails generate devise:install
+```
 
-Happy coding!
-The Cloud9 IDE team
+After that you can create your model. In our case:
 
+```
+rails generate devise User
+```
 
-## Support & Documentation
+Now you can migrate the db
 
-Visit http://docs.c9.io for support, or to learn more about using Cloud9 IDE. 
-To watch some training videos, visit http://www.youtube.com/user/c9ide
+```
+rake db:migrate
+```
+
+______________________________
+CREATING ALL THE NECESSARY SCAFFOLDS
+
+we have added the following scaffolds:
+ -accommodations
+ -offers
+ -countries
+ -comments
+ -places
+ -reservations
+ 
+ Example:
+ 
+ ```
+ rails g scaffold Accomomdations title:string content:text image:string
+ ```
