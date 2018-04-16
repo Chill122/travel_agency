@@ -9,23 +9,26 @@
       <h2><%= @offer.title %></h2>
       <div style="float: left">
           <p>
+            <b><%= @offer.start_date.strftime("%A, %d. %m. %Y") %> - <%= @offer.end_date.strftime("%A, %d. %m. %Y") %></b>
+          </p>
+          <p>
+            <strong>Price:</strong>
+            <%= number_to_currency @offer.price, unit: "€", separator: ",", delimiter: "", format: "%n %u" %> / person
+          </p>
+          <p>
             <strong>Open spots:</strong>
             <%= @offer.spots - @reservations.sum(:persons) %> / <%= @offer.spots %>
           </p>
-          
           <p>
-            <strong>From:</strong>
-            <%= @offer.start_date.strftime("%A - %d. %m. %Y") %>
-          </p>
-          
-          <p>
-            <strong>To:</strong>
-            <%= @offer.end_date.strftime("%A - %d. %m. %Y") %>
-          </p>
-          
-          <p>
-            <strong>Price:</strong>
-            <%= number_to_currency @offer.price, unit: "€", separator: ",", delimiter: "", format: "%n %u" %>
+            <% if user_signed_in? %>
+              <% if @offer.spots - @reservations.sum(:persons) == 0 %>
+                <span class="btn btn-primary" id="no-reservation">Reservations are not available</span>
+              <% else %>
+                <%= link_to "Make reservation", new_reservation_path(offer_id: @offer.id), :class => 'btn btn-primary', :style => "width: 130px" %>
+              <% end %>
+            <% else %>
+            <i><span style="color: #555; font-size: 12px;">To make a reservation you have to log-in first.</span></i>
+            <% end %>
           </p>
       </div>
       
@@ -36,6 +39,51 @@
       <div style="clear: both">
         <h3>About</h3>
         <%= @offer.description %>
+      </div><br>
+      
+      <h3>Accommodation</h3>
+        
+      <table class="table" style="text-align: center;">
+        <thead>
+          <tr>
+            <th style="width: 15%;">Name</th>
+            <th style="width: 10%; text-align: center;">Type</th>
+            <th style="width: 12%; text-align: left;">Rating</th>
+            <th style="width: 30%; text-align: center;">Address</th>
+            <th style="width: 13%; text-align: center;">City / State</th>
+            <th style="width: 20%; text-align: center;">Country</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td style="text-align: left;"><%= @offer.accommodation.title %></td>
+            <td><%= @offer.accommodation.accom_type %></td>
+            <td style="text-align: left;">
+            <% case @offer.accommodation.rating %>
+            <% when 5 %>
+              &#9733; &#9733; &#9733; &#9733; &#9733;
+            <% when 4 %>
+              &#9733; &#9733; &#9733; &#9733;
+            <% when 3 %>
+              &#9733; &#9733; &#9733;
+            <% when 2 %>
+              &#9733; &#9733;
+            <% when 1 %>
+              &#9733;
+            <% else %>
+              None
+            <% end %>
+            </td>
+            <td><%= @offer.accommodation.address %></td>
+            <td><%= @offer.accommodation.place.name %></td>
+            <td><%= @offer.accommodation.place.country.name %></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div>
+        <%= @offer.accommodation.description %>
       </div><br>
       
       <% if @comments.exists? %>
@@ -71,22 +119,21 @@
         <br>
       <% end %>
       <% if user_signed_in? %>
-          <button data-toggle="collapse" data-target="#comment-input" class="btn btn-primary" style="width: 130px">Add a comment</button><br><br>
-          <div id="comment-input" class="collapse">
+        <button data-toggle="collapse" data-target="#comment-input" class="btn btn-primary" style="width: 130px">Comment</button><br><br>
+        <div id="comment-input" class="collapse">
           <%= form_for(@comment) do |f| %>
             <% if @comment.errors.any? %>
               <div id="error_explanation">
                 <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
                 <ul>
-                <% @comment.errors.full_messages.each do |message| %>
+                  <% @comment.errors.full_messages.each do |message| %>
                   <li><%= message %></li>
-                <% end %>
+                  <% end %>
                 </ul>
-            </div>
+              </div>
             <% end %>
             <div class="form-group">
-              <%= f.label :content %><br>
-              <%= f.text_area(:content, {:class => 'form-control' }) %>
+              <%= f.text_area :content, :class => 'form-control', :required => true, :style => "width: 80%; margin: auto;" %>
             </div>
             <div class="form-group">
               <%= f.hidden_field :offer_id, :value => @offer.id %>
@@ -95,23 +142,21 @@
               <%= f.submit "Add", :class => "btn btn-primary" %>
             </div>
           <% end %>
+          <br>
         </div>
-          <% if @offer.spots - @reservations.sum(:persons) == 0 %>
-            <span class="btn btn-primary" id="no-reservation">Reservations are not available</span>
-          <% else %>
-            <%= link_to "Make reservation", new_reservation_path(offer_id: @offer.id), :class => 'btn btn-primary', :style => "width: 130px" %>
-          <% end %>
-        <br><br>
+        
         <% if current_user.admin > 0 %>
           <div class="btn-group btn-group-justified">
             <% if @reservations.exists? %>
             <%= link_to 'See reservations', reservations_path(offer_id: @offer.id, offer_title: @offer.title), :class => 'btn btn-default' %>
             <% end %>
             <%= link_to 'Edit', edit_offer_path(@offer), :class => 'btn btn-default' %>
-            <%= link_to 'Delete', @offer, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-default' %>
+            <%= link_to 'Delete', @offer, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-danger' %>
           </div>
           <br>
         <% end %>
+      <% else %>
+        <p><i><span style="color: #555; font-size: 12px;">To add a comment you have to log-in first.</span></i></p>
       <% end %>
       <%= link_to 'Back', offers_path, :class => 'btn btn-default' %>
       </div>

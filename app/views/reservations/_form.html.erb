@@ -12,13 +12,13 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :persons %><br>
+    <%= f.label :persons, 'For how many persons?' %><br>
     <%= f.number_field(:persons, :class => 'form-control', min: 1, max: @reservation.offer.spots - @reservations.sum(:persons), value: 0) %>
   </div>
   <div class="form-group">
     <%= f.hidden_field :offer_id %>
   </div>
   <div class="actions">
-    <%= f.submit "Send reservation", :class => "btn btn-primary" %>
+    <%= f.submit "Send", :class => "btn btn-primary" %>
   </div>
 <% end %>
