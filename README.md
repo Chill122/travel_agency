@@ -115,3 +115,53 @@ class User < ApplicationRecord
   end
 end
 ```
+___________________________
+FILE UPLOAD
+
+To help me upload files (pictures) I used gem 'carrierwave'.
+
+So just add to you gemfile:
+```
+gem 'carrierwave'
+```
+
+Next, run the bundler:
+```
+bundle install
+```
+Start off by generating an uploader:
+```
+rails generate uploader Image
+```
+this should give you a file in:
+```
+app/uploaders/image_uploader.rb
+```
+Check out this file for some hints on how you can customize your uploader. It should look something like this:
+```
+class AvatarUploader < CarrierWave::Uploader::Base
+  storage :file
+end
+```
+You need to require carrierwave
+```
+require 'carrierwave/orm/activerecord'
+```
+Add a string to the model you want to mount the uploader by creating a migration:
+```
+rails g migration add_image_to_users image:string
+rake db:migrate
+```
+Open your model file and mount the uploader:
+```
+class User < ActiveRecord::Base
+  mount_uploader :image, ImageUploader
+end
+```
+Then just add this to the form so you can choose the picture you want.
+```
+<div class="form-group">
+    <%= f.label :image %><br>
+    <%= f.file_field(:image, :style => "width: 100%;", :class => "btn btn-default") %>
+</div>
+```
