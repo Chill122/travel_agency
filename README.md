@@ -165,3 +165,30 @@ Then just add this to the form so you can choose the picture you want.
     <%= f.file_field(:image, :style => "width: 100%;", :class => "btn btn-default") %>
 </div>
 ```
+___________________
+HEROKU PUSH
+
+I pushed the application to Heroku with the help of GitHub.
+
+I ran these commands in the terminal:
+```
+git add .
+git push -am "Name"
+git push master <link>
+```
+The the terminal will ask you for your cardentials.
+
+After that you can push your applicaion to Heroku, first you have to login:
+```
+heroku login
+```
+The terminal will ask you for your cardentials
+
+Then create a Heroku project:
+```
+heroku create
+```
+And then just push your files to Heroku
+```
+git push heroku (your branch name)
+```
