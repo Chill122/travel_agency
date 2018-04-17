@@ -192,3 +192,7 @@ And then just push your files to Heroku
 ```
 git push heroku (your branch name)
 ```
+__________________
+STYLING AND LOOKS
+
+For styling I mainly used Bootstrap 3.3.7 and my own CSS.
